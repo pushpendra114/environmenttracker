@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solver</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to bottom, #0077b6, #000000);
+            color: white;
+            text-align: center;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(0, 0, 0, 1);
+            padding: 15px 20px;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-sizing: border-box;
+            border-bottom-right-radius: 10%;
+            border-bottom-left-radius: 10%;
+        }
+
+        .logo {
+            font-size: 22px;
+            font-weight: bold;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+            margin-left: auto;
+        }
+
+        .nav-button {
+            padding: 10px 16px;
+            background-color: #38b000;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            white-space: nowrap;
+        }
+
+        .nav-button:hover {
+            background-color: #144600;
+        }
+
+        .menu-icon {
+            display: none;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 50px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.9);
+            border-radius: 5px;
+            padding: 10px;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .dropdown-menu button {
+            background: none;
+            color: white;
+            border: none;
+            padding: 10px;
+            text-align: left;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        .dropdown-menu button:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        @media (max-width: 600px) {
+            .nav-buttons {
+                display: none;
+            }
+
+            .menu-icon {
+                display: block;
+            }
+
+            .dropdown-menu {
+                display: flex;
+            }
+
+            .dropdown-menu button {
+                display: block;
+            }
+
+            #userProfile {
+                display: none;
+            }
+        }
+
+        .main-containers {
+            margin-top: 80px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+            flex: 1;
+        }
+
+        .awareness-section {
+            margin-top: 40px;
+            padding: 0px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .awareness-grid {
+            display: flex;
+            gap: 15px;
+            padding: 0px;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
+            white-space: nowrap;
+            scrollbar-width: thin;
+            scrollbar-color: #38b000 transparent;
+        }
+
+        .campaign-card {
+            flex: 0 0 auto;
+            scroll-snap-align: start;
+        }
+
+        .campaign-card img {
+            width: 200px;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+        .awareness-grid {
+            width: 80%;
+            height: 200px;
+            overflow-y: hidden;
+            overflow-x: scroll;
+        }
+
+        .footer {
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            text-align: center;
+            padding: 15px;
+            font-size: 14px;
+            width: 100%;
+            margin-top: auto;
+        }
+
+        .about-me {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+            gap: 40px;
+            max-width: 900px;
+            margin: auto;
+        }
+
+        .about-image img {
+            width: 250px;
+            height: 250px;
+            border-radius: 50%;
+            object-fit: cover;
+            box-shadow: 0px 0px 15px 5px white;
+        }
+
+        .about-text {
+            max-width: 500px;
+            text-align: left;
+        }
+
+        @media (max-width: 768px) {
+            .about-me {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+        }
+
+
+        @media screen and (max-width: 768px) {
+            .navbar {
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+            }
+
+            .nav-buttons {
+                display: none;
+            }
+
+            .menu-icon {
+                display: block;
+                order: 2;
+                margin-left: auto;
+            }
+
+            .upload-section {
+                padding: 10px;
+
+            }
+
+            .upload-box input[type="text"],
+            .animated-button {
+                width: 100%;
+                box-sizing: border-box;
+            }
+        }
+
+        .issues-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(30%, 1fr));
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .issue-card {
+            border: 1px solid #ccc;
+            border-radius: 12px;
+            padding: 15px;
+            margin: 10px;
+            max-width: 350px;
+            background: #fff;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .issue-card img,
+        .issue-card video {
+            width: 100%;
+
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        .issue-card p {
+            margin: 4px 0;
+            color: #000000;
+        }
+
+        /* Ensuring menu-icon is hidden for screens larger than 768px */
+        @media screen and (min-width: 770px) {
+            .menu-icon {
+                display: none;
+
+            }
+
+            .nav-buttons {
+                display: flex;
+
+            }
+
+            .dropdown-menu {
+                display: none;
+            }
+        }
+
+        #Distance {
+            color: #00fb69;
+            font-weight: bold;
+        }
+
+        #profileCircle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #60c833;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            cursor: pointer;
+
+        }
+
+        #profileCircleDropdown {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #60c833;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            cursor: pointer;
+
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="logo"><img src="Photo/logo.png" alt="hj" width="180"></div>
+        <div class="nav-buttons">
+            <a href="./Success_Story.html"><button class="nav-button">Success Stories</button></a>
+
+            <a href="./profile.html"><button id="profileCircle" class="nav-button"></button></a>
+            <button id="loginButton" class="nav-button" onclick="logout()">Logout</button>
+        </div>
+
+
+        <div class="menu-icon" id="menuIconAfterLogin" style="display: none;" onclick="toggleMenuAfterLogin()">☰
+        </div>
+
+        <div class="dropdown-menu" id="dropdownMenuAfterLogin" style="display: none;">
+            <div id="profileCircleDropdown"
+                style="width: 40px; height: 40px; border-radius: 50%; background: #60c833; color: white; display: flex; justify-content: center; align-items: center; font-weight: bold; margin: auto;">
+            </div>
+            <a href="./Success_Story.html"><button class="nav-button">Success Stories</button></a>
+            <button id="logoutButtonDropdown" class="nav-button" onclick="logout()">Logout</button>
+        </div>
+    </nav>
+    <div class="main-containers">
+        <h2>Alerted Nearby Environmental Issues</h2>
+        <div class="alerted-issues-section">
+            <p>Below are issues recently reported by citizens near your location.</p>
+
+            <div class="issues-grid">
+
+            </div>
+
+
+            <div class="awareness-section">
+                <h2>Top 5 Awareness Campaigns in India</h2>
+                <div class="awareness-grid">
+                    <div class="campaign-card">
+                        <a target="_blank" href="https://sbm.gov.in/sbm_dbt/secure/login.aspx">
+                            <img src="Photo/Swach_bharat.jpg" alt="Swach Bharat">
+                        </a>
+                    </div>
+                    <div class="campaign-card">
+                        <img src="Photo/epmkn.jpeg" alt="Ek Ped Maa Ke Naam">
+                    </div>
+                    <div class="campaign-card">
+                        <img src="Photo/namami_gange.jpeg" alt="Namami Gange">
+                    </div>
+                    <div class="campaign-card">
+                        <img src="Photo/plastic_free_india.jpg" alt="Plastic Free India">
+                    </div>
+                    <div class="campaign-card">
+                        <img src="Photo/awareness.jpg" alt="Awareness">
+                    </div>
+                </div>
+            </div>
+
+            <h2>About Me</h2>
+            <div class="about-me">
+                <div class="about-image">
+                    <img src="Photo/Id_photo.jpg" alt="Profile Picture">
+                </div>
+                <div class="about-text" style="text-align: center;">
+                    <p>Hello! I'm passionate about environmental awareness and sustainability. Through this
+                        platform, I aim to
+                        bring attention to crucial environmental issues and inspire action. Join me in making a
+                        difference!</p>
+                </div>
+            </div>
+
+            <footer class="footer">© 2025 Environmental Watch. All rights reserved.</footer>
+            <script>
+
+                async function fetchNearbyIssues(lat, lng) {
+                    console.log("Fetching nearby issues...");
+                    const res = await fetch(`/api/issues/nearby?lat=${lat}&lng=${lng}`);
+                    const issues = await res.json();
+                    displayIssues(issues);
+                }
+
+                function displayIssues(issues) {
+                    console.log("Displaying issues:", issues); // Debugging line
+                    const grid = document.querySelector('.issues-grid');
+                    grid.innerHTML = ''; // Clear previous entries
+
+                    issues.forEach(issue => {
+                        const card = document.createElement('div');
+                        card.className = 'issue-card';
+
+                        // Check mimetype for image or video
+                        const mediaContent = issue.mimetype.startsWith('image')
+                            ? `<img src="/uploads/${issue.filename}" alt="Issue Image">`
+                            : `<video controls><source src="/uploads/${issue.filename}" type="${issue.mimetype}"></video>`;
+
+                        card.innerHTML = `
+            ${mediaContent}
+            <p><strong>Description:</strong> ${issue.description}</p>
+            <p><strong>Location:</strong> ${issue.address}</p>
+            <p><strong>Alerted:</strong> ${timeSince(new Date(issue.upload_timestamp))} ago</p>
+            <p><strong>Reported By:</strong> ${issue.email}</p>
+            <p id = "Distance"><strong>Distance :</strong> ${issue.distance.toFixed(3)}KM away</p>
+        `;
+
+                        grid.appendChild(card);
+                    });
+                }
+
+
+                function timeSince(date) {
+                    const seconds = Math.floor((new Date() - date) / 1000);
+                    const h = Math.floor(seconds / 3600);
+                    if (h < 24) return `${h} hours`;
+                    const d = Math.floor(h / 24);
+                    return `${d} days`;
+                }
+
+                function getUserLocation() {
+                    console.log("Fetching user location...");
+                    if (navigator.geolocation) {
+                        navigator.geolocation.getCurrentPosition(position => {
+                            fetchNearbyIssues(position.coords.latitude, position.coords.longitude);
+                        }, () => alert('Location permission denied.'));
+                    } else {
+                        alert('Geolocation not supported.');
+                    }
+                }
+
+                window.onload = function () {
+                    getUserLocation();
+                    profile();
+                };
+
+
+                function toggleMenuAfterLogin() {
+                    const menu = document.getElementById('dropdownMenuAfterLogin');
+                    menu.style.display = menu.style.display === 'none' ? 'flex' : 'none';
+                }
+
+                async function profile() {
+                    const res = await fetch('/api/user/profile');
+                    const user = await res.json();
+                    console.log(user); // Debugging line
+                    const profileCircle = document.getElementById('profileCircle');
+                    const profileCircleDropdown = document.getElementById('profileCircleDropdown');
+                    const profileName = user.name.charAt(0).toUpperCase();
+                    profileCircle.innerText = profileName;
+                    profileCircleDropdown.innerText = profileName;
+
+                }
+
+                async function logout() {
+                    const logout = document.getElementById('dropdownMenuBeforeLogin');
+                    try {
+                        const response = await fetch('/logout');
+                        if (response.ok) {
+                            alert("Logged out successfully!");
+                            window.location.reload();
+
+                            logout.style.display = 'none';
+
+                        }
+                    } catch (error) {
+                        console.error("Error during logout:", error);
+                        logout.style.display = 'block';
+                    }
+                }
+            </script>
+
+
+
+</body>
+
+</html>

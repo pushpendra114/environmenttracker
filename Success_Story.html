@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Success Stories</title>
+   
+    <style>
+      body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to bottom, #0077b6, #000000);
+            color: white;
+            text-align: center;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        #head1{
+            color: black;
+
+        }
+      .container {
+        max-width: 1000px;
+        margin: 20px auto;
+        padding: 20px;
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+      .quote {
+        font-style: italic;
+        font-size: 18px;
+        margin-bottom: 20px;
+        color: #2f8a38;
+      }
+      .story-row {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 20px;
+      }
+      .story-item {
+        background: rgb(0, 0, 0);
+        padding: 10px;
+        border-radius: 8px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        cursor: pointer;
+        transition: transform 0.3s;
+        width: 250px;
+      }
+      .story-item:hover {
+        transform: scale(1.05);
+      }
+      .story-item img {
+        width: 100%;
+        border-radius: 5px;
+      }
+      .story-item p {
+        margin-top: 5px;
+        font-weight: bold;
+      }
+      .motivation {
+        margin-top: 20px;
+        font-size: 16px;
+        font-weight: bold;
+        color: #0e7c4e;
+      }
+      #successhead{
+          justify-items: center;
+          display: flex;
+          align-items: center;
+          height: 100px;
+      }
+     .link{
+      color: #000000;
+     }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div id="successhead">
+        <div id="texthead" style="margin-right: 5px; margin-left: 300px;" >
+      <h2 id="head1">Success Stories</h2>
+    </div>
+    <div id="image">
+      <img src="/Photo/open-book.png" alt="" width="40">
+    </div>
+    </div>
+      <p class="quote">"Be the change that you wish to see in the world." - Mahatma Gandhi</p>
+      <div class="story-row" id="storyRow"></div>
+      <p class="motivation">Next story can be yours! Take action today and make a difference.</p>
+      <p class="link">For Adding your Success story here mail us your success story on @singpushpendra613@gmail.com</p>
+      <p class="link">We will be happy to read your journey towards sustainability</p>
+    </div>
+    <script>
+      const stories = [
+        { title: "Waste to Welfare", img: "/photo/Wtw.png", pdf: " Report Waste to Welfare.pdf" },
+        { title: "Plastic Free CURAJ", img: "/photo/plastic_free_curaj.jpg", pdf: "plastic_free_curaj.pdf" },
+        { title: "Awareness Campaign", img: "/photo/awareness.jpg", pdf: "awareness_campaign.pdf" }
+      ];
+      
+      const storyRow = document.getElementById("storyRow");
+      
+      stories.forEach(story => {
+        const storyItem = document.createElement("div");
+        storyItem.classList.add("story-item");
+        storyItem.innerHTML = `
+          <img src="${story.img}" alt="${story.title}" />
+          <p>${story.title}</p>
+        `;
+        storyItem.onclick = () => window.open(story.pdf, "_blank");
+        storyRow.appendChild(storyItem);
+      });
+    </script>
+  </body>
+</html>

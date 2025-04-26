@@ -1,0 +1,24 @@
+# Node modules (always ignore)
+node_modules/
+
+# Environment variable files
+.env
+
+# Uploaded files (if you don't want to upload user files to GitHub)
+# uploads/
+
+# Photo folder (if it contains user-uploaded content)
+# Photo/
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# npm debug file
+npm-debug.log*
+
+# Optional: Ignore VS Code settings if you use VS Code
+.vscode/

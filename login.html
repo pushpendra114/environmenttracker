@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login & Registration</title>
+    <style>
+        /* ... (Your CSS styles) ... */
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to bottom, #0077b6, #000000);
+            color: white;
+            text-align: center;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            border-radius: 15px;
+            width: 80%;
+            max-width: 400px;
+            box-shadow: 0 4px 8px rgba(38, 1, 1, 0.5);
+        }
+
+        h2 {
+            margin-bottom: 20px;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .input-group input {
+            width: 95%;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+        }
+
+        .btn {
+            width: 50%;
+            padding: 10px;
+            background-color: #38b000;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        .btn:hover {
+            background-color: #154104;
+        }
+
+        .switch {
+            margin-top: 10px;
+        }
+
+        .switch a {
+            color: #38b000;
+            text-decoration: none;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #38b000;
+            border-radius: 5px;
+            background: white;
+            color: black;
+            font-size: 16px;
+            cursor: pointer;
+            outline: none;
+        }
+
+        select option {
+            background: rgb(0, 0, 0);
+            color: rgb(255, 255, 255);
+            font-size: 16px;
+        }
+
+        label {
+            font-size: 16px;
+            color: rgb(255, 255, 255);
+            display: block;
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="header">
+        <div id="profile-section" style="display: none;">
+            <div id="profile-circle"></div>
+            <div id="three-dot-menu" style="display: none;">
+                <button onclick="toggleMenu()">☰</button>
+                <div id="menu-options" style="display: none;">
+                    <button onclick="viewSuccessStory()">Success Story</button>
+                    <button onclick="logout()">Logout</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container" id="login-form">
+        <h2>Login</h2>
+        <div class="input-group">
+            <label for="type">Who are you ?</label>
+            <select name="user-type" id="user-type-login">
+                <option value="Detector">Detector</option>
+                <option value="Solver">Solver</option>
+                <option value="Admin">Admin</option>
+            </select>
+        </div>
+        <div class="input-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" placeholder="Enter your email">
+        </div>
+        <div class="input-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" placeholder="Enter your password">
+        </div>
+        <button class="btn" onclick="login()">Login</button>
+        <p class="switch">Don't have an account? <a onclick="toggleForm()">Register</a></p>
+    </div>
+
+    <div class="container" id="register-form" style="display: none;">
+        <h2>Register</h2>
+        <div class="input-group">
+            <label for="user-type-register">Who are you ?</label>
+            <select name="user-type" id="user-type-register">
+                <option value="Detector">Detector</option>
+                <option value="Solver">Solver</option>
+            </select>
+        </div>
+        <div class="input-group">
+            <label for="name">Name</label>
+            <input type="text" id="name" placeholder="Enter your name">
+        </div>
+        <div class="input-group">
+            <label for="email-reg">Email</label>
+            <input type="email" id="email-reg" placeholder="Enter your email" oninput="emailchecker()">
+            <div id="emailcorrectness" style="font-size: 0.8em; margin-top: 5px;">
+            </div>
+            <div class="input-group">
+                <label for="password-reg">Password</label>
+                <input type="password" id="password-reg" placeholder="Create a password"
+                    oninput="displayPasswordStrength()">
+                <div id="passwordStrength" style="font-size: 0.8em; margin-top: 5px;"></div>
+            </div>
+        </div>
+        <button class="btn" onclick="emptycheck()">Register</button>
+        <p class="switch">Already have an account? <a onclick="toggleForm()">Login</a></p>
+    </div>
+    <script>
+
+        function toggleForm() {
+            const loginForm = document.getElementById('login-form');
+            const registerForm = document.getElementById('register-form');
+            const otpForm = document.getElementById('otp-form');
+
+
+            if (loginForm.style.display === 'none') {
+                loginForm.style.display = 'block';
+                registerForm.style.display = 'none';
+            } else {
+                loginForm.style.display = 'none';
+                registerForm.style.display = 'block';
+            }
+        }
+
+
+
+        function checkPasswordStrength(password) {
+            let strength = 0;
+            if (password.length >= 8) {
+                strength += 1;
+            }
+            if (password.match(/[a-z]+/)) {
+                strength += 1;
+            }
+            if (password.match(/[A-Z]+/)) {
+                strength += 1;
+            }
+            if (password.match(/[0-9]+/)) {
+                strength += 1;
+            }
+            if (password.match(/[^a-zA-Z0-9]+/)) {
+                strength += 1;
+            }
+            if (password.length >= 20) {
+                strength += 4
+            }
+
+            if (strength === 0) {
+                return "";
+            } else if (strength < 3) {
+                return "Weak";
+            } else if (strength <= 4) {
+                return "Medium";
+            } else {
+                return "Strong";
+            }
+        }
+
+        function displayPasswordStrength() {
+            const passwordInput = document.getElementById("password-reg");
+            const strengthDisplay = document.getElementById("passwordStrength");
+
+            if (passwordInput && strengthDisplay) {
+                const password = passwordInput.value;
+                const strength = checkPasswordStrength(password);
+                strengthDisplay.textContent = strength;
+
+                if (strength === "Weak") {
+                    strengthDisplay.style.color = "red";
+                } else if (strength === "Medium") {
+                    strengthDisplay.style.color = "orange";
+                } else if (strength === "Strong") {
+                    strengthDisplay.style.color = "green";
+                } else {
+                    strengthDisplay.style.color = ""; // reset color
+                }
+            }
+
+        }
+
+
+        function emailchecker() {
+            const email = document.getElementById("email-reg");
+            const emailcorrectness = document.getElementById("emailcorrectness");
+            const emailValue = email.value;
+            let pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+            if (emailValue === "") {
+                emailcorrectness.style.color = "black";
+
+            } else if (pattern.test(emailValue)) {
+                emailcorrectness.style.color = "green";
+                emailcorrectness.textContent = "Good to go";
+                return true;
+            } else if (!pattern.test(emailValue)) {
+                emailcorrectness.style.color = "red";
+                emailcorrectness.textContent = "Enter Correct Email";
+                return false;
+            }
+
+
+        }
+
+        async function emptycheck() {
+            const email = document.getElementById("email-reg");
+            const password = document.getElementById("password-reg");
+            const name = document.getElementById("name");
+            const userType = document.getElementById("user-type-register");
+
+            // Check for empty fields
+            if (email.value === "" || password.value === "" || name.value === "" || userType.value === "") {
+                if (email.value === "") {
+                    email.style.border = "2px solid red";
+                } else {
+                    email.style.border = "";
+                }
+                if (password.value === "") {
+                    password.style.border = "2px solid red";
+                } else {
+                    password.style.border = "";
+                }
+                if (name.value === "") {
+                    name.style.border = "2px solid red";
+                } else {
+                    name.style.border = "";
+                }
+                if (userType.value === "") {
+                    userType.style.border = "2px solid red";
+                } else {
+                    userType.style.border = "";
+                }
+                return false;
+            }
+
+            // Reset borders
+            email.style.border = "";
+            password.style.border = "";
+            name.style.border = "";
+            userType.style.border = "";
+
+            console.log("emailChecker called: ", emailchecker());
+
+            // Wait for Isemail() to complete
+            const isEmailValid = await Isemail();
+            if (emailchecker() && isEmailValid) {
+                console.log("Email is valid and available.");
+                const emailValue = email.value;
+
+                sendOTPEmail(emailValue).then(() => {
+                    console.log('OTP Requested Successfully!');
+                    window.location.href = 'send-otp.html'; // Redirect after OTP is successfully sent
+                }).catch((error) => {
+                    console.error('Error sending OTP:', error);
+                    alert("An error occurred while sending the OTP. Please try again.");
+                });
+            } else {
+                console.log("Email is invalid or already exists.");
+                email.style.border = "2px solid red";
+                alert("Please enter a valid email address or check if the email is already registered.");
+            }
+
+            return true;
+        }
+        async function Isemail() {
+            const email = document.getElementById("email-reg").value;
+            console.log("Email to check:", email); // Debugging log
+            const emailfield = document.getElementById("email-reg");
+
+            try {
+                const response = await fetch('/email-verify', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ email: email }),
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    console.log("Error response from server:", errorData); // Debugging log
+                    if (errorData.message === "Email already exists") {
+                        emailfield.style.border = "2px solid red";
+                        console.log("Email already exists, setting border to red.");
+                        return false;
+                    }
+                } else {
+                    const successData = await response.json();
+                    console.log("Success response from server:", successData); // Debugging log
+                    if (successData.message === "Email is available") {
+                        emailfield.style.border = "";
+                        return true;
+                    }
+                }
+            } catch (error) {
+                console.error("Error checking email:", error);
+                return false;
+            }
+        }
+
+        async function sendOTPEmail(email) {
+            const name = document.getElementById("name").value;
+            const role = document.getElementById("user-type-register").value;
+            const password = document.getElementById("password-reg");
+            const emailfield = document.getElementById("email-reg");
+
+            try {
+                const response = await fetch('/send-otp', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ email: email, name: name, role: role, password: password.value }),
+                });
+
+                const data = await response.json(); // Parse the JSON response once
+
+                if (!response.ok) {
+                    console.log("Error response from server:", data); // Debugging log
+                    if (data.message === "Email already exists") {
+                        emailfield.style.border = "2px solid red";
+                        alert("This email is already registered. Please use a different email.");
+                    }
+                    throw new Error(data.message || "Failed to send OTP");
+                }
+
+                console.log("OTP request successful:", data);
+                emailfield.style.border = ""; // Reset the border color if successful
+                return data;
+
+            } catch (error) {
+                console.error("Error sending OTP request:", error);
+                return { error: error.message || "An unexpected error occurred." };
+            }
+        }
+        async function login() {
+            const email = document.getElementById('email');
+            const password = document.getElementById('password');
+
+            // Check for empty fields
+            if (email.value === "" || password.value === "") {
+                if (email.value === "") {
+                    email.style.border = "2px solid red";
+                } else {
+                    email.style.border = "";
+                }
+                if (password.value === "") {
+                    password.style.border = "2px solid red";
+                } else {
+                    password.style.border = "";
+                }
+                return false;
+            }
+
+            // Reset borders
+            email.style.border = "";
+            password.style.border = "";
+
+            try {
+                const response = await fetch('/login-request', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ email: email.value, password: password.value }),
+                });
+
+                const data = await response.json(); // Parse the JSON response once
+                console.log("Full response data:", data); // Debugging log
+                console.log("Response message:", data.message); // Debugging log
+
+                if (response.ok) {
+                    // Handle success case
+                    if (data.message === "Correct") {
+                        console.log("Login successful:", data);
+                        alert("Login successful! Redirecting to home page.");
+                        window.location.href = "/Index.html"; // Redirect to home page
+                    }
+                } else {
+                    // Handle error cases
+                    console.log("Error response from server:", data); // Debugging log
+                    if (data.message === "Incorrect") {
+                        password.style.border = "2px solid red";
+                        alert("Incorrect email or password. Please try again.");
+                    } else if (data.message === "Email not registered") {
+                        email.style.border = "2px solid red";
+                        alert("This email is not registered. Please register first.");
+                    } else {
+                        alert("An unexpected error occurred. Please try again.");
+                    }
+                }
+            } catch (error) {
+                console.error("Error during login request:", error);
+                alert("An unexpected error occurred. Please try again later.");
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem('isLoggedIn');
+            localStorage.removeItem('userName');
+            updateUIBasedOnLogin();
+            alert('Logged out successfully!');
+        }
+
+    </script>
+</body>
+
+</html>

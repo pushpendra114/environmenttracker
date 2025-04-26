@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<style>
+    /* ... (Your CSS styles) ... */
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: linear-gradient(to bottom, #0077b6, #000000);
+        color: white;
+        text-align: center;
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .container {
+        background: rgba(0, 0, 0, 0.8);
+        padding: 20px;
+        border-radius: 15px;
+        width: 80%;
+        max-width: 400px;
+        box-shadow: 0 4px 8px rgba(38, 1, 1, 0.5);
+    }
+
+    h2 {
+        margin-bottom: 20px;
+    }
+
+    .input-group {
+        margin-bottom: 15px;
+        text-align: left;
+    }
+
+    .input-group label {
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    .input-group input {
+        width: 95%;
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+    }
+
+    .btn {
+        width: 50%;
+        padding: 10px;
+        background-color: #38b000;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background-color 0.3s;
+    }
+
+    .btn:hover {
+        background-color: #154104;
+    }
+
+    .switch {
+        margin-top: 10px;
+    }
+
+    .switch a {
+        color: #38b000;
+        text-decoration: none;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    select {
+        width: 100%;
+        padding: 10px;
+        border: 2px solid #38b000;
+        border-radius: 5px;
+        background: white;
+        color: black;
+        font-size: 16px;
+        cursor: pointer;
+        outline: none;
+    }
+
+    select option {
+        background: rgb(0, 0, 0);
+        color: rgb(255, 255, 255);
+        font-size: 16px;
+    }
+
+    label {
+        font-size: 16px;
+        color: rgb(255, 255, 255);
+        display: block;
+        margin-bottom: 5px;
+    }
+</style>
+
+<body>
+    <div class="container" id="otp-form">
+        <h2 id="verify">OTP</h2>
+        <div class="input-group">
+            <label for="opt">Enter Email OTP</label>
+            <input type="text" id="otp" placeholder="Enter OTP">
+        </div>
+        <button class="btn" id="verify" onclick="handleFormSubmit()">Finish</button>
+
+    </div>
+
+    <script>
+
+async function handleFormSubmit() {
+    const form = document.getElementById("otp-form");
+    const otpInput = document.getElementById("otp");
+    const otp = otpInput.value;
+
+    try {
+        const response = await fetch("/verify-otp", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ otp: otp }),
+        });
+
+        console.log("Sending OTP to server:", otp); 
+
+        const data = await response.json();
+
+        if (response.ok) {
+            window.location.href = "/login.html";
+            console.log("User OTP sent to server");
+        } else {
+            otpInput.style.borderColor = "red";
+            alert(data.error);
+        }
+    } catch (error) {
+        console.error("Error:", error);
+        alert("An error occurred.");
+    }
+
+    otpInput.value = "";
+    otpInput.style.borderColor = "";
+}
+
+
+    </script>
+
+</body>
+
+</html>

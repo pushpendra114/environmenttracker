@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>User Profile</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to bottom, #0077b6, #000000);
+            color: white;
+            text-align: center;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .container {
+            max-width: 960px;
+            /* Adjust for three items in a row with spacing */
+            margin: auto;
+            padding: 20px;
+            text-align: center;
+            background: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-top: 40px;
+            border-radius: 15px;
+        }
+
+        .profile-circle {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: #4CAF50;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            margin: auto;
+        }
+
+        .email {
+            margin-top: 10px;
+            font-size: 18px;
+            color: #333;
+        }
+
+        .change-password-btn {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background: #2196F3;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .password-fields {
+            display: none;
+            text-align: left;
+            margin-top: 20px;
+        }
+
+        .password-fields input {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        .section-title {
+            margin-top: 30px;
+            font-size: 20px;
+            font-weight: bold;
+            border-bottom: 2px solid #ccc;
+            padding-bottom: 5px;
+            text-align: left;
+        }
+
+        .issues {
+            margin-top: 20px;
+            display: grid;
+            /* Use CSS Grid for a more structured layout */
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            /* Create up to 3 columns */
+            gap: 20px;
+        }
+
+        .issue {
+            background: #fafafa;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            /* Center content within each issue */
+            display: flex;
+            flex-direction: column;
+            /* Stack description, media, and location */
+            align-items: center;
+            /* Center items horizontally */
+        }
+
+        .issue-description {
+            font-size: 14px;
+            margin-bottom: 10px;
+            color: #000000;
+            border-radius: 10%;
+            border-color: #000000;
+        }
+
+        .issue-media-container {
+            width: 100%;
+            /* Make media container take full width */
+            max-height: 200px;
+            /* Increased max height for larger media */
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: center;
+            /* Center the media */
+            align-items: center;
+        }
+
+        .issue-media {
+            display: block;
+            max-width: 80%;
+            /* Make media larger than description */
+            max-height: 100%;
+            border-radius: 5px;
+        }
+
+        .issue-location {
+            font-size: 14px;
+            color: #777;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            /* Space for the icon */
+        }
+
+        .location-icon {
+            /* You might need to include an actual icon here (e.g., using a font library) */
+            font-size: 16px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="profile-circle" id="profileCircle">A</div>
+        <div class="email" id="userEmail">user@example.com</div>
+
+        <button class="change-password-btn" onclick="togglePasswordFields()">Change Password</button>
+
+        <div class="password-fields" id="passwordFields">
+            <input type="password" placeholder="Current Password" />
+            <input type="password" placeholder="New Password" />
+            <input type="password" placeholder="Confirm New Password" />
+        </div>
+
+        <div class="section-title">Reported Issues</div>
+        <div class="issues" id="issuesContainer">
+        </div>
+    </div>
+
+    <script>
+        function togglePasswordFields() {
+            const fields = document.getElementById('passwordFields');
+            fields.style.display = fields.style.display === 'block' ? 'none' : 'block';
+        }
+
+        async function loadIssues() {
+            const container = document.getElementById('issuesContainer');
+            container.innerHTML = ''; // Clear previous
+            const userEmail = document.getElementById('userEmail');
+            const profileCircle = document.getElementById('profileCircle');
+            try {
+
+                const response = await fetch('/profile/uploads');
+                if (!response.ok) throw new Error('Failed to fetch');
+                const issues = await response.json();
+                userEmail.textContent = issues[0].email;
+                profileCircle.textContent = issues[0].email.charAt(0).toUpperCase(); // Set first letter of email
+                console.log(issues); // Debugging line
+                if (issues.length === 0) {
+                    container.innerHTML = '<p>No reported issues yet.</p>';
+                    return;
+                }
+
+                issues.forEach(issue => {
+                    const issueDiv = document.createElement('div');
+                    issueDiv.className = 'issue';
+
+                    const mediaContainer = document.createElement('div');
+                    mediaContainer.className = 'issue-media-container';
+
+                    const mediaPath = `/uploads/${issue.filename}`;
+                    if (issue.mimetype.startsWith('image/')) {
+                        const img = document.createElement('img');
+                        img.src = mediaPath;
+                        img.className = 'issue-media';
+                        mediaContainer.appendChild(img);
+                    } else if (issue.mimetype.startsWith('video/')) {
+                        const video = document.createElement('video');
+                        video.src = mediaPath;
+                        video.controls = true;
+                        video.className = 'issue-media';
+                        mediaContainer.appendChild(video);
+                    }
+
+                    issueDiv.appendChild(mediaContainer);
+
+                    const desc = document.createElement('div');
+                    desc.className = 'issue-description';
+                    desc.textContent = issue.description || 'No description';
+                    console.log(issue.description); // Debugging line
+
+                    issueDiv.appendChild(desc);
+
+                    const locationDiv = document.createElement('div');
+                    locationDiv.className = 'issue-location';
+                    locationDiv.innerHTML = `<span class="location-icon">📍</span> ${issue.address || 'Unknown location'}`;
+                    issueDiv.appendChild(locationDiv);
+
+                    container.appendChild(issueDiv);
+                });
+            } catch (error) {
+                console.error('Error loading issues:', error);
+                container.innerHTML = '<p>Failed to load reported issues.</p>';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadIssues();
+        });
+    </script>
+</body>
+
+</html>
