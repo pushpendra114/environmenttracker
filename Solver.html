@@ -474,7 +474,7 @@
                         const response = await fetch('/logout');
                         if (response.ok) {
                             alert("Logged out successfully!");
-                            window.location.reload();
+                            window.location.href = "/index.html";
 
                             logout.style.display = 'none';
 
