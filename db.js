@@ -15,9 +15,11 @@ export async function connectToDatabase() {
         rejectUnauthorized: false
       }
     });
-    console.log('✅ Connected to Aiven MySQL database!');
+    alert('✅ Connected to Aiven MySQL database!');
+    // console.log('✅ Connected to Aiven MySQL database!');
     return connection;
   } catch (error) {
+    alert('✅ Error connecting to database!');
     console.error('❌ Error connecting to Aiven MySQL:', error.message);
     throw error;
   }
