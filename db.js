@@ -15,16 +15,16 @@ export async function connectToDatabase() {
         rejectUnauthorized: false
       }
     });
-    alert('✅ Connected to Aiven MySQL database!');
-    // console.log('✅ Connected to Aiven MySQL database!');
+    
+    // Replace alert with console.log for server-side code
+    console.log('✅ Connected to Aiven MySQL database!');
     return connection;
   } catch (error) {
-    alert('✅ Error connecting to database!');
+    // Replace alert with console.error for errors
     console.error('❌ Error connecting to Aiven MySQL:', error.message);
     throw error;
   }
 }
-
 
 export async function executeQuery(connection, query, values) {
   try {
