@@ -325,13 +325,6 @@
             margin-bottom: 10px;
         }
 
-        #preview {
-            width: 100%;
-            height: auto;
-            border-radius: 10px;
-            background: #000;
-        }
-
         .upload-box input {
             width: 100%;
             padding: 12px;
@@ -371,32 +364,45 @@
             box-sizing: border-box;
         }
 
-        @media screen and (max-width: 768px) {
-            .navbar {
-                flex-direction: row;
-                justify-content: space-between;
-                align-items: center;
+        @media (max-width: 768px) {
+            .menu-icon {
+                display: block;
+                /* Ensure the menu icon is visible */
+                font-size: 24px;
+                cursor: pointer;
+                color: white;
             }
 
             .nav-buttons {
                 display: none;
+                /* Hide nav buttons on smaller screens */
             }
 
-            .menu-icon {
-                display: block;
-                order: 2;
-                margin-left: auto;
-            }
-
-            .upload-section {
+            .dropdown-menu {
+                display: none;
+                /* Initially hide the dropdown menu */
+                flex-direction: column;
+                position: absolute;
+                top: 60px;
+                right: 20px;
+                background: rgba(0, 0, 0, 0.9);
                 padding: 10px;
-
+                border-radius: 5px;
+                z-index: 1000;
             }
 
-            .upload-box input[type="text"],
-            .animated-button {
-                width: 100%;
-                box-sizing: border-box;
+            .dropdown-menu button {
+                display: block;
+                padding: 10px;
+                color: white;
+                background: none;
+                border: none;
+                text-align: left;
+                cursor: pointer;
+            }
+
+            .dropdown-menu button:hover {
+                background: rgba(255, 255, 255, 0.2);
             }
         }
 
@@ -477,6 +483,34 @@
             align-items: center;
             height: 100px;
         }
+
+        #profileCircle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #60c833;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            cursor: pointer;
+
+        }
+
+        #profileCircleDropdown {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #60c833;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            cursor: pointer;
+
+        }
     </style>
 </head>
 
@@ -489,15 +523,10 @@
         </div>
         <div class="nav-buttons" id="After_userProfile" style="display: none;">
             <a href="./profile.html">
-                <div id="profileCircle"
-                    style="width: 40px; height: 40px; border-radius: 50%; background: #60c833; color: white; display: flex; justify-content: center; align-items: center; font-weight: bold; padding: auto;">
-                </div>
+                <button id="profileCircle"></button>
             </a>
-            <div id="profileCircle"
-                style="width: 40px; height: 40px; border-radius: 50%; background: #60c833; color: white; display: flex; justify-content: center; align-items: center; font-weight: bold; padding: auto;">
-            </div>
             <a href="./Success_Story.html"><button class="nav-button">Success Stories</button></a>
-            <button id="loginButton" class="nav-button" onclick="logout()">Logout</button>
+            <button id="logoutButton" class="nav-button" onclick="logout()">Logout</button>
 
         </div>
         <div class="menu-icon" id="menuIconBeforeLogin" style="display: none;" onclick="toggleMenuBeforeLogin()">☰</div>
@@ -508,9 +537,9 @@
                 onclick="window.location.href='/login.html'">Login</button>
         </div>
         <div class="dropdown-menu" id="dropdownMenuAfterLogin" style="display: none;">
-            <div id="profileCircleDropdown"
-                style="width: 40px; height: 40px; border-radius: 50%; background: #60c833; color: white; display: flex; justify-content: center; align-items: center; font-weight: bold; margin: auto;">
-            </div>
+            <a href="./profile.html">
+                <button id="profileCircleDropdown"></button>
+            </a>
             <a href="./Success_Story.html"><button class="nav-button">Success Stories</button></a>
             <button id="logoutButtonDropdown" class="nav-button" onclick="logout()">Logout</button>
         </div>
@@ -704,7 +733,7 @@
             menu.style.display = menu.style.display === 'flex' ? 'none' : 'flex';
         }
 
-
+        
         async function logout() {
             const logout = document.getElementById('dropdownMenuBeforeLogin');
             try {
