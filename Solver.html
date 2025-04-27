@@ -93,27 +93,7 @@
             background: rgba(255, 255, 255, 0.2);
         }
 
-        @media (max-width: 600px) {
-            .nav-buttons {
-                display: none;
-            }
 
-            .menu-icon {
-                display: block;
-            }
-
-            .dropdown-menu {
-                display: flex;
-            }
-
-            .dropdown-menu button {
-                display: block;
-            }
-
-            #userProfile {
-                display: none;
-            }
-        }
 
         .main-containers {
             margin-top: 80px;
@@ -209,34 +189,6 @@
         }
 
 
-        @media screen and (max-width: 768px) {
-            .navbar {
-                flex-direction: row;
-                justify-content: space-between;
-                align-items: center;
-            }
-
-            .nav-buttons {
-                display: none;
-            }
-
-            .menu-icon {
-                display: block;
-                order: 2;
-                margin-left: auto;
-            }
-
-            .upload-section {
-                padding: 10px;
-
-            }
-
-            .upload-box input[type="text"],
-            .animated-button {
-                width: 100%;
-                box-sizing: border-box;
-            }
-        }
 
         .issues-grid {
             display: grid;
@@ -269,21 +221,7 @@
         }
 
         /* Ensuring menu-icon is hidden for screens larger than 768px */
-        @media screen and (min-width: 770px) {
-            .menu-icon {
-                display: none;
 
-            }
-
-            .nav-buttons {
-                display: flex;
-
-            }
-
-            .dropdown-menu {
-                display: none;
-            }
-        }
 
         #Distance {
             color: #00fb69;
@@ -316,6 +254,42 @@
             font-weight: bold;
             cursor: pointer;
 
+        }
+
+        @media (max-width: 600px) {
+            .awareness-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(45%, 1fr));
+                gap: 15px;
+            }
+
+            .issues-grid {
+                grid-template-columns: 1fr;
+                padding: 10px;
+            }
+
+            .footer {
+                font-size: 10px;
+            }
+        }
+
+        /* Larger Screens */
+        @media (min-width: 769px) {
+            .navbar {
+                flex-direction: row;
+            }
+
+            .nav-buttons {
+                display: flex;
+            }
+
+            .menu-icon {
+                display: none;
+            }
+
+            .dropdown-menu {
+                display: none;
+            }
         }
     </style>
 </head>

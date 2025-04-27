@@ -244,19 +244,17 @@ app.post("/upload", upload.single("media"), async (req, res) => {
 
     console.log("SQL Query:", sql); // Debugging log
     console.log("SQL Values:", values); // Debugging log
-    await db.query(sql, values, (err, result) => {
-      if (err) {
-        console.error("Error inserting data into MySQL:", err);
-        return res
-          .status(500)
-          .json({ message: "Failed to save data to the database" });
-      }
+    try {
+      const result = await db.query(sql, values);
       console.log("Data inserted successfully:", result);
       res.status(200).json({
         message: "File uploaded and data saved successfully",
-        filename: filename,
+        filename: req.file.filename,
       });
-    });
+    } catch (err) {
+      console.error("Error inserting data into MySQL:", err);
+      return res.status(500).json({ message: "Failed to save data to the database" });
+    }
   }
 });
 

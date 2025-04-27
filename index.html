@@ -430,6 +430,53 @@
             border-radius: 4px;
             box-sizing: border-box;
         }
+
+        .spinner {
+            border: 8px solid #f3f3f3;
+            border-top: 8px solid #3498db;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .success {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            font-weight: bold;
+            color: green;
+            opacity: 0;
+            animation: fadeIn 2s forwards;
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100px;
+        }
     </style>
 </head>
 
@@ -441,9 +488,11 @@
             <button id="loginButton" class="nav-button" onclick="window.location.href='/login.html'">Login</button>
         </div>
         <div class="nav-buttons" id="After_userProfile" style="display: none;">
-            <a href="./profile.html"><div id="profileCircle"
-                style="width: 40px; height: 40px; border-radius: 50%; background: #60c833; color: white; display: flex; justify-content: center; align-items: center; font-weight: bold; padding: auto;">
-            </div></a> 
+            <a href="./profile.html">
+                <div id="profileCircle"
+                    style="width: 40px; height: 40px; border-radius: 50%; background: #60c833; color: white; display: flex; justify-content: center; align-items: center; font-weight: bold; padding: auto;">
+                </div>
+            </a>
             <div id="profileCircle"
                 style="width: 40px; height: 40px; border-radius: 50%; background: #60c833; color: white; display: flex; justify-content: center; align-items: center; font-weight: bold; padding: auto;">
             </div>
@@ -470,15 +519,31 @@
         <h2>Capture & Upload Environmental Issues</h2>
         <div class="upload-section">
             <p>Dear Detector, please capture the image or video from your device and upload it here.</p>
+
+            <!-- File Input -->
             <input type="file" id="fileInput" accept="image/*,video/*" required>
+
+            <!-- Description Textarea -->
             <textarea id="description" placeholder="Write a description of the issue..."></textarea>
+
+            <!-- Upload Button with Animation -->
             <button class="animated-button" id="uploadBtn">
                 <span>Upload</span>
                 <span></span>
             </button>
-        </div>
 
+            <!-- Loading Spinner -->
+            <div id="loading" class="loading" style="display: none;">
+                <div class="spinner"></div>
+            </div>
+
+            <!-- Success Message (Green Tick) -->
+            <div id="success" class="success" style="display: none;">
+                ✔️ Upload Successful!
+            </div>
+        </div>
     </div>
+
     <div class="awareness-section">
         <h2>Top 5 Awareness Campaigns in India</h2>
         <div class="awareness-grid">
@@ -571,33 +636,30 @@
         };
 
         // Handle file upload
-       
+
 
         document.getElementById("uploadBtn").addEventListener("click", async () => {
             const fileInput = document.getElementById("fileInput");
             const file = fileInput.files[0];
-            
             const description = document.getElementById('description').value;
 
             if (!file || !description || !userLocationCoordinates) {
-                alert(
-                    'Please provide all required inputs (file, description, and ensure location is retrieved).'
-                );
+                alert('Please provide all required inputs (file, description, and ensure location is retrieved).');
                 return;
             }
 
             const formData = new FormData();
             formData.append('media', file);
             formData.append('description', description);
-            console.log('have reached')
-            formData.append(
-                'location',
-                `${userLocationCoordinates.latitude},${userLocationCoordinates.longitude}`
-            ); 
-            console.log(userLocationCoordinates.latitude,userLocationCoordinates.longitude)// Send coordinates
+            formData.append('location', `${userLocationCoordinates.latitude},${userLocationCoordinates.longitude}`);
+
             if (userAddress) {
-                formData.append('address', userAddress); // Optionally send the address as well
+                formData.append('address', userAddress);
             }
+
+            // Show loading spinner with animation
+            document.getElementById('loading').style.display = 'flex';
+            document.getElementById('success').style.display = 'none'; // Hide success message
 
             try {
                 const response = await fetch('/upload', {
@@ -605,22 +667,33 @@
                     body: formData,
                 });
 
-                console.log('i have sent');
                 const result = await response.json();
-                console.log('i got this:' + result);
+
+                // Hide loading spinner when upload is finished
+                document.getElementById('loading').style.display = 'none';
+
                 if (response.ok) {
-                    alert('Upload successful!');
+                    // Show success message with green tick and animation
+                    document.getElementById('success').style.display = 'flex';
+                    setTimeout(() => {
+                        document.getElementById('success').style.display = 'none';
+                        document.getElementById("fileInput").value = "";
+                        document.getElementById("description").value = "";
+                    }, 2000);
+
                 } else if (result.message === 'Unauthorized') {
                     alert('Please login first to upload issues');
-                }
-                else {
+                } else {
                     alert('Upload failed: ' + result.message);
                 }
             } catch (err) {
                 console.error('Error uploading file:', err);
+                // Hide loading spinner in case of error
+                document.getElementById('loading').style.display = 'none';
                 alert('An error occurred while uploading. Please try again.');
             }
         });
+
         function toggleMenuBeforeLogin() {
             const menu = document.getElementById('dropdownMenuBeforeLogin');
             menu.style.display = menu.style.display === 'flex' ? 'none' : 'flex';
@@ -671,12 +744,12 @@
                     const data = await response.json();
                     userData = data;
                     if (data.loggedIn) {
-                        if(data.role === 'Solver'){
+                        if (data.role === 'Solver') {
                             window.location.href = '/Solver.html';
-                        }else if(data.role === 'Detector'){
+                        } else if (data.role === 'Detector') {
                             applyUIChanges(true, data.userInitial);
                         }
-                       
+
                     }
                 } else {
                     throw new Error("Unauthorized");
