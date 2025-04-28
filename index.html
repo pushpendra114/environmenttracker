@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Environmental Watch</title>
+    <title>Environmental Tracker</title>
     <style>
         body {
             margin: 0;
@@ -93,7 +93,7 @@
             background: rgba(255, 255, 255, 0.2);
         }
 
-        @media (max-width: 600px) {
+        /* @media (max-width: 600px) {
             .nav-buttons {
                 display: none;
             }
@@ -113,7 +113,7 @@
             #userProfile {
                 display: none;
             }
-        }
+        } */
 
         .main-containers {
             margin-top: 80px;
@@ -364,10 +364,10 @@
             box-sizing: border-box;
         }
 
-        @media (max-width: 768px) {
+        /* @media (max-width: 768px) {
             .menu-icon {
                 display: block;
-                /* Ensure the menu icon is visible */
+              
                 font-size: 24px;
                 cursor: pointer;
                 color: white;
@@ -375,12 +375,12 @@
 
             .nav-buttons {
                 display: none;
-                /* Hide nav buttons on smaller screens */
+                
             }
 
             .dropdown-menu {
                 display: none;
-                /* Initially hide the dropdown menu */
+                
                 flex-direction: column;
                 position: absolute;
                 top: 60px;
@@ -404,10 +404,10 @@
             .dropdown-menu button:hover {
                 background: rgba(255, 255, 255, 0.2);
             }
-        }
+        } */
 
         /* Ensuring menu-icon is hidden for screens larger than 768px */
-        @media screen and (min-width: 770px) {
+        /* @media screen and (min-width: 770px) {
             .menu-icon {
                 display: none;
 
@@ -421,7 +421,7 @@
             .dropdown-menu {
                 display: none;
             }
-        }
+        } */
 
 
         #description {
@@ -510,6 +510,104 @@
             font-weight: bold;
             cursor: pointer;
 
+        }
+
+        /* =========================== */
+        /* Desktop View (Above 768px)   */
+        /* =========================== */
+        @media screen and (min-width: 770px) {
+            .menu-icon {
+                display: none;
+                /* Hide the hamburger menu */
+            }
+
+            .nav-buttons {
+                display: flex;
+                /* Show nav buttons */
+            }
+
+            .dropdown-menu {
+                display: none;
+                /* Dropdown hidden on big screens */
+            }
+        }
+
+        /* =========================== */
+        /* Mobile View (Below 768px)    */
+        /* =========================== */
+        @media (max-width: 768px) {
+            .menu-icon {
+                display: block;
+                /* Show hamburger menu */
+                font-size: 24px;
+                cursor: pointer;
+                color: white;
+            }
+
+            .nav-buttons {
+                display: none;
+                /* Hide normal nav buttons */
+            }
+
+            .dropdown-menu {
+                display: none;
+                /* Hidden initially */
+                flex-direction: column;
+                position: absolute;
+                top: 60px;
+                right: 20px;
+                background: rgba(0, 0, 0, 0.9);
+                padding: 10px;
+                border-radius: 5px;
+                z-index: 1000;
+            }
+
+            .dropdown-menu button {
+                display: block;
+                padding: 10px;
+                color: white;
+                background: none;
+                border: none;
+                text-align: left;
+                cursor: pointer;
+            }
+
+            .dropdown-menu button:hover {
+                background: rgba(255, 255, 255, 0.2);
+            }
+
+            /* About Section */
+            .about-me {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+        }
+
+        /* =========================== */
+        /* Extra Small Mobile (Below 600px) */
+        /* =========================== */
+        @media (max-width: 600px) {
+            .nav-buttons {
+                display: none;
+            }
+
+            .menu-icon {
+                display: block;
+            }
+
+            .dropdown-menu {
+                display: flex;
+                /* Open by default (if you want it dynamic, keep display:none and control with JS) */
+            }
+
+            .dropdown-menu button {
+                display: block;
+            }
+
+            #userProfile {
+                display: none;
+            }
         }
     </style>
 </head>
@@ -733,7 +831,7 @@
             menu.style.display = menu.style.display === 'flex' ? 'none' : 'flex';
         }
 
-        
+
         async function logout() {
             const logout = document.getElementById('dropdownMenuBeforeLogin');
             try {
@@ -760,7 +858,11 @@
             const menuIconAfterLogin = document.getElementById('menuIconAfterLogin');
             const Before_userProfile = document.getElementById('Before_userProfile');
             const profileCircle = document.getElementById('profileCircle');
+            const After_userProfile = document.getElementById('After_userProfile');
+            const logoutButton = document.getElementById('logoutButton');
+            const logoutButtonDropdown = document.getElementById('logoutButtonDropdown');
 
+       
             let userData = null;
 
             try {
@@ -784,7 +886,7 @@
                     throw new Error("Unauthorized");
                 }
             } catch (error) {
-                console.error("Error during login:", error);
+
                 alert("Login failed. Please try again.");
             }
 
@@ -805,18 +907,21 @@
                     if (screen) {
                         menuIconAfterLogin.style.display = 'block';
                         menuIconBeforeLogin.style.display = 'none';
-
                         loginButtonDropdown.style.display = 'none';
                         profileCircleDropdown.style.display = 'block';
+                        profileCircleDropdown.innerText = userInitial;
+                    }else{
+                        menuIconAfterLogin.style.display = 'none';
+                        menuIconBeforeLogin.style.display = 'none';
+                        loginButtonDropdown.style.display = 'none';
+                        profileCircleDropdown.style.display = 'block';
+                        profileCircleDropdown.innerText = userInitial;
                     }
-
                     Before_userProfile.style.display = 'none';
-                    After_userProfile.style.display = 'flex';
-                    profileCircle.style.display = 'block';
 
 
                 } else {
-                    loginButton.style.display = 'block';
+
                     console.log("User is not logged in");
                     if (screen) {
                         menuIconAfterLogin.style.display = 'none';
@@ -824,11 +929,9 @@
 
                         loginButtonDropdown.style.display = 'block';
                         profileCircleDropdown.style.display = 'none';
-                    }
+                    } 
 
-                    Before_userProfile.style.display = 'flex';
-                    After_userProfile.style.display = 'none';
-                    profileCircle.style.display = 'none';
+
                 }
             }
         });
