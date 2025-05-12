@@ -616,7 +616,7 @@
     <nav class="navbar">
         <div class="logo"><img src="Photo/logo.png" alt="hj" width="180"></div>
         <div class="nav-buttons" id="Before_userProfile">
-            <a href="./Success_Story.html"><button class="nav-button">Success Stories</button></a>
+            <a href="./Success_Story.html"><button class="nav-button" id="Success_Story">Success Stories</button></a>
             <button id="loginButton" class="nav-button" onclick="window.location.href='/login.html'">Login</button>
         </div>
         <div class="nav-buttons" id="After_userProfile" style="display: none;">
@@ -861,6 +861,7 @@
             const After_userProfile = document.getElementById('After_userProfile');
             const logoutButton = document.getElementById('logoutButton');
             const logoutButtonDropdown = document.getElementById('logoutButtonDropdown');
+            const success = document.getElementById('');
 
        
             let userData = null;
@@ -928,13 +929,16 @@
                         menuIconBeforeLogin.style.display = 'block';
                         loginButtonDropdown.style.display = 'block';
                         profileCircleDropdown.style.display = 'none';
+                        
+                        
                        
                     }else{
                         menuIconAfterLogin.style.display = 'none';
                         menuIconBeforeLogin.style.display = 'none';
                         loginButtonDropdown.style.display = 'none';
                         profileCircleDropdown.style.display = 'none';
-                       
+                        loginButton.style.display = 'block';
+                        profileCircle.style.display = 'block';
                     }
                     Before_userProfile.style.display = 'block';
 
