@@ -291,6 +291,21 @@
                 display: none;
             }
         }
+
+        .action-buttons button {
+            margin: 5px;
+            padding: 8px 14px;
+            border: none;
+            border-radius: 6px;
+            background-color: #38b000;
+            color: white;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .action-buttons button:hover {
+            background-color: #144600;
+        }
     </style>
 </head>
 
@@ -302,7 +317,7 @@
 
             <a href="./profile.html"><button id="profileCircle" class="nav-button"></button></a>
             <button id="loginButton" class="nav-button" onclick="logout()">Logout</button>
-           
+
         </div>
 
 
@@ -315,7 +330,7 @@
             </div>
             <a href="./Success_Story.html"><button class="nav-button">Success Stories</button></a>
             <button id="logoutButtonDropdown" class="nav-button" onclick="logout()">Logout</button>
-             <a href="./NearByYou.html"><button id="NearByIssues" class="nav-button">NearByIssues</button></a>
+            <a href="./NearByYou.html"><button id="NearByIssues" class="nav-button">NearByIssues</button></a>
         </div>
     </nav>
     <div class="main-containers">
@@ -389,13 +404,18 @@
                             : `<video controls><source src="/uploads/${issue.filename}" type="${issue.mimetype}"></video>`;
 
                         card.innerHTML = `
-            ${mediaContent}
-            <p><strong>Description:</strong> ${issue.description}</p>
-            <p><strong>Location:</strong> ${issue.address}</p>
-            <p><strong>Alerted:</strong> ${timeSince(new Date(issue.upload_timestamp))} ago</p>
-            <p><strong>Reported By:</strong> ${issue.email}</p>
-            <p id = "Distance"><strong>Distance :</strong> ${issue.distance.toFixed(3)}KM away</p>
-        `;
+    ${mediaContent}
+    <p><strong>Description:</strong> ${issue.description}</p>
+    <p><strong>Location:</strong> ${issue.address}</p>
+    <p><strong>Alerted:</strong> ${timeSince(new Date(issue.upload_timestamp))} ago</p>
+    <p><strong>Reported By:</strong> ${issue.email}</p>
+    <p id="Distance"><strong>Distance :</strong> ${issue.distance.toFixed(3)}KM away</p>
+    <div class="action-buttons">
+        <button onclick="handleAccept(this)">Accept</button>
+        <button onclick="handleReject(this)">Reject</button>
+    </div>
+`;
+
 
                         grid.appendChild(card);
                     });
@@ -460,6 +480,44 @@
                         logout.style.display = 'block';
                     }
                 }
+                function handleReject(button) {
+                    const reason = prompt("Please provide a reason for rejecting this issue:");
+                    if (reason) {
+                        alert("Issue rejected with reason: " + reason);
+                        // TODO: Send this reason to backend if needed
+                        button.parentElement.innerHTML = `<p style="color:red;"><strong>Rejected</strong><br>Reason: ${reason}</p>`;
+                    }
+                }
+
+                function handleAccept(button) {
+                    const container = button.parentElement;
+                    container.innerHTML = `
+        <button onclick="handleProceed(this)">Proceed</button>
+        <button onclick="handleCancel(this)">Cancel</button>
+    `;
+                }
+
+                function handleProceed(button) {
+                    const container = button.parentElement;
+                    container.innerHTML = `
+        <button onclick="handleSolved(this)">Solved</button>
+        <button onclick="handleCancel(this)">Cancel</button>
+    `;
+                }
+
+                function handleCancel(button) {
+                    const reason = prompt("Please provide a reason for cancelling:");
+                    if (reason) {
+                        alert("Action cancelled with reason: " + reason);
+                        button.parentElement.innerHTML = `<p style="color:orange;"><strong>Cancelled</strong><br>Reason: ${reason}</p>`;
+                    }
+                }
+
+                function handleSolved(button) {
+                    button.parentElement.innerHTML = `<p style="color:green;"><strong>Issue marked as Solved ✅</strong></p>`;
+                    // TODO: Notify backend if needed
+                }
+
             </script>
 
 
