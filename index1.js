@@ -278,9 +278,7 @@ app.get("/profile/uploads", async (req, res) => {
 });
 
 app.get("/api/issues/nearby", async (req, res) => {
-  if (!req.session.user) {
-    return res.status(401).json({ message: "Unauthorized" });
-  }
+ 
 
   const userLat = parseFloat(req.query.lat);
   const userLng = parseFloat(req.query.lng);

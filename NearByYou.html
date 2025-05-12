@@ -27,8 +27,7 @@
             flex: 1;
         }
 
-        .issues-grid {   
-            width: 100%;
+        .issues-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(30%, 1fr));
             gap: 20px;
@@ -75,31 +74,35 @@
 
 <body>
     <div class="main-containers">
-        <h1>Nearby Reported Issues</h1>
-        <div class="issues-grid"></div>
-    </div>
-    <script> async function fetchNearbyIssues(lat, lng) {
-            console.log("Fetching nearby issues...");
-            const res = await fetch(`/api/issues/nearby?lat=${lat}&lng=${lng}`);
-            const issues = await res.json();
-            displayIssues(issues);
-        }
+        <h2>Below are issues recently reported by citizens near your location.</h2>
+        <div class="alerted-issues-section">
 
-        function displayIssues(issues) {
-            console.log("Displaying issues:", issues); // Debugging line
-            const grid = document.querySelector('.issues-grid');
-            grid.innerHTML = ''; // Clear previous entries
 
-            issues.forEach(issue => {
-                const card = document.createElement('div');
-                card.className = 'issue-card';
+            <div class="issues-grid">
 
-                // Check mimetype for image or video
-                const mediaContent = issue.mimetype.startsWith('image')
-                    ? `<img src="/uploads/${issue.filename}" alt="Issue Image">`
-                    : `<video controls><source src="/uploads/${issue.filename}" type="${issue.mimetype}"></video>`;
+            </div>
+            <script> async function fetchNearbyIssues(lat, lng) {
+                    console.log("Fetching nearby issues...");
+                    const res = await fetch(`/api/issues/nearby?lat=${lat}&lng=${lng}`);
+                    const issues = await res.json();
+                    displayIssues(issues);
+                }
 
-                card.innerHTML = `
+                function displayIssues(issues) {
+                    console.log("Displaying issues:", issues); // Debugging line
+                    const grid = document.querySelector('.issues-grid');
+                    grid.innerHTML = ''; // Clear previous entries
+
+                    issues.forEach(issue => {
+                        const card = document.createElement('div');
+                        card.className = 'issue-card';
+
+                        // Check mimetype for image or video
+                        const mediaContent = issue.mimetype.startsWith('image')
+                            ? `<img src="/uploads/${issue.filename}" alt="Issue Image">`
+                            : `<video controls><source src="/uploads/${issue.filename}" type="${issue.mimetype}"></video>`;
+
+                        card.innerHTML = `
             ${mediaContent}
             <p><strong>Description:</strong> ${issue.description}</p>
             <p><strong>Location:</strong> ${issue.address}</p>
@@ -108,34 +111,34 @@
             <p id = "Distance"><strong>Distance :</strong> ${issue.distance.toFixed(3)}KM away</p>
         `;
 
-                grid.appendChild(card);
-            });
-        }
+                        grid.appendChild(card);
+                    });
+                }
 
 
-        function timeSince(date) {
-            const seconds = Math.floor((new Date() - date) / 1000);
-            const h = Math.floor(seconds / 3600);
-            if (h < 24) return `${h} hours`;
-            const d = Math.floor(h / 24);
-            return `${d} days`;
-        }
+                function timeSince(date) {
+                    const seconds = Math.floor((new Date() - date) / 1000);
+                    const h = Math.floor(seconds / 3600);
+                    if (h < 24) return `${h} hours`;
+                    const d = Math.floor(h / 24);
+                    return `${d} days`;
+                }
 
-        function getUserLocation() {
-            console.log("Fetching user location...");
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(position => {
-                    fetchNearbyIssues(position.coords.latitude, position.coords.longitude);
-                }, () => alert('Location permission denied.'));
-            } else {
-                alert('Geolocation not supported.');
-            }
-        }
+                function getUserLocation() {
+                    console.log("Fetching user location...");
+                    if (navigator.geolocation) {
+                        navigator.geolocation.getCurrentPosition(position => {
+                            fetchNearbyIssues(position.coords.latitude, position.coords.longitude);
+                        }, () => alert('Location permission denied.'));
+                    } else {
+                        alert('Geolocation not supported.');
+                    }
+                }
 
-        window.onload = function () {
-            getUserLocation();
-        };
-    </script>
+                window.onload = function () {
+                    getUserLocation();
+                };
+            </script>
 </body>
 
 </html>
