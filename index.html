@@ -616,10 +616,12 @@
     <nav class="navbar">
         <div class="logo"><img src="Photo/logo.png" alt="hj" width="180"></div>
         <div class="nav-buttons" id="Before_userProfile">
+            <a href="./NearByYou.html"><button id="NearByIssues" class="nav-button">NearByIssues</button></a>
             <a href="./Success_Story.html"><button class="nav-button" id="Success_Story">Success Stories</button></a>
             <button id="loginButton" class="nav-button" onclick="window.location.href='/login.html'">Login</button>
         </div>
         <div class="nav-buttons" id="After_userProfile" style="display: none;">
+            <a href="./NearByYou.html"><button id="NearByIssues" class="nav-button">NearByIssues</button></a>
             <a href="./profile.html">
                 <button id="profileCircle"></button>
             </a>
@@ -630,11 +632,14 @@
         <div class="menu-icon" id="menuIconBeforeLogin" style="display: none;" onclick="toggleMenuBeforeLogin()">☰</div>
         <div class="menu-icon" id="menuIconAfterLogin" style="display: none;" onclick="toggleMenuAfterLogin()">☰</div>
         <div class="dropdown-menu" id="dropdownMenuBeforeLogin" style="display: none;">
+            <a href="./NearByYou.html"><button id="NearByIssues" class="nav-button">NearByIssues</button></a>
             <a href="./Success_Story.html"><button class="nav-button">Success Stories</button></a>
+
             <button id="loginButtonDropdown" class="nav-button"
                 onclick="window.location.href='/login.html'">Login</button>
         </div>
         <div class="dropdown-menu" id="dropdownMenuAfterLogin" style="display: none;">
+            <a href="./NearByYou.html"><button id="NearByIssues" class="nav-button">NearByIssues</button></a>
             <a href="./profile.html">
                 <button id="profileCircleDropdown"></button>
             </a>
@@ -863,7 +868,7 @@
             const logoutButtonDropdown = document.getElementById('logoutButtonDropdown');
             const success = document.getElementById('');
 
-       
+
             let userData = null;
 
             try {
@@ -911,7 +916,7 @@
                         loginButtonDropdown.style.display = 'none';
                         profileCircleDropdown.style.display = 'block';
                         profileCircleDropdown.innerText = userInitial;
-                    }else{
+                    } else {
                         menuIconAfterLogin.style.display = 'none';
                         menuIconBeforeLogin.style.display = 'none';
                         loginButtonDropdown.style.display = 'none';
@@ -929,10 +934,10 @@
                         menuIconBeforeLogin.style.display = 'block';
                         loginButtonDropdown.style.display = 'block';
                         profileCircleDropdown.style.display = 'none';
-                        
-                        
-                       
-                    }else{
+
+
+
+                    } else {
                         menuIconAfterLogin.style.display = 'none';
                         menuIconBeforeLogin.style.display = 'none';
                         loginButtonDropdown.style.display = 'none';
@@ -946,7 +951,7 @@
                 }
 
 
-                
+
             }
         });
 
