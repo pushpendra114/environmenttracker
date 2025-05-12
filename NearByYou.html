@@ -27,23 +27,29 @@
             flex: 1;
         }
 
+
         .issues-grid {
-            width: 100%;
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(30%, 1fr));
-            gap: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 30px;
             padding: 20px;
+            width: 100%;
+            max-width: 1200px;
+            margin: auto;
         }
 
         .issue-card {
+            width: 90%;
+            max-width: 500px;
             border: 1px solid #ccc;
             border-radius: 12px;
-            padding: 15px;
-            margin: 10px;
-            max-width: 350px;
+            padding: 20px;
             background: #fff;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+            text-align: left;
         }
+
 
         .issue-card img,
         .issue-card video {
@@ -69,6 +75,14 @@
         #Distance:hover {
             color: #00fb69;
             font-weight: bold;
+        }
+
+        @media (min-width: 768px) {
+            .issues-grid {
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
         }
     </style>
 </head>
